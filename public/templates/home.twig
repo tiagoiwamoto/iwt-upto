@@ -7,13 +7,25 @@
             <label for="formFileLg" class="form-label">Selecione uma ou várias imagens para enviar</label>
             <input id="images" ref="file" name="file[]" class="form-control form-control-lg" multiple="multiple" type="file">
         </div>
-        <div class="d-grid gap-2">
+        <div class="d-grid gap-2 mt-3">
             <button v-on:click="postImages" class="btn btn-primary" type="button">Upload</button>
         </div>
         <br />
         <h4>Últimas imagens enviadas</h4>
         <div class="row">
-            <div class="col-sm-12 col-md-3" v-for="img in images"><img v-bind:src="img.image_url" width="120" class="album-img" /></div>
+            <div class="col-sm-12 col-md-3 col-lg-2" v-for="img in images">
+                <a v-bind:href="img.image_url" data-lightbox="Imagem 000">
+                    <img v-bind:src="img.image_url" width="120" class="album-img" />
+                </a>
+                <div class="mb-3">
+                    <label for="imageUrl" class="form-label">Link direto</label>
+                    <input type="text" @mousedown="copy(img.image_url)" v-model="img.image_url" readonly="readonly" class="form-control" id="imageUrl">
+                </div>
+                <div class="mb-3">
+                    <label for="imageUrl" class="form-label">Bbcode</label>
+                    <input type="text" @mousedown="copy(img.image_url)" v-model="img.image_url" readonly="readonly" class="form-control" id="imageUrl">
+                </div>
+            </div>
         </div>
         <span>Temos um total de 8.278 imagens em nosso banco de dados</span>
 
@@ -67,6 +79,21 @@
                             this.snackbarMsg = error;
                             this.showToast();
                         })
+                },
+                async copy(value) {
+                    await navigator.clipboard.writeText(value);
+                    this.snackbarMsg = 'Url copiada com sucesso!';
+                    this.showToast();
+                },
+                showToast(){
+                    // Get the snackbar DIV
+                    var x = document.getElementById("snackbar");
+
+                    // Add the "show" class to DIV
+                    x.className = "show";
+
+                    // After 3 seconds, remove the show class from DIV
+                    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
                 }
             }
         })
