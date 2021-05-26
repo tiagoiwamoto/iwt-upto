@@ -86,9 +86,10 @@ class IwtUserService{
         return true;
     }
 
-    public function recoverImages(){
+    public function recoverImages($user){
         $images = $this->managerDb
             ->table($this->tableImages)
+            ->where('user', '=', $user)
             ->select()
             ->get();
 

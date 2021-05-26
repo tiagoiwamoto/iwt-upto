@@ -74,8 +74,8 @@ class IwtUserBO{
         return $this->iwtUserService->saveFile($files, $user);
     }
 
-    public function performRecoverUserImages(){
-        return $this->iwtUserService->recoverImages();
+    public function performRecoverUserImages($user){
+        return $this->iwtUserService->recoverImages($user->id);
     }
 
 }

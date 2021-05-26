@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <span>Temos um total de 8.278 imagens em nosso banco de dados</span>
+        <span>Temos um total de ${totalImages} imagens em nosso banco de dados</span>
 
         <div id="snackbar" style="z-index: 10000">${ snackbarMsg }</div>
     </div>
@@ -38,6 +38,7 @@
             delimiters: ['${', '}'],
             el: '#app',
             data: {
+                totalImages: 0,
                 images: [],
                 snackbarMsg: ''
             },
@@ -74,6 +75,7 @@
                     await axios.get('/images', config)
                         .then(response => {
                             this.images = response.data;
+                            this.totalImages = this.images.length;
                         })
                         .catch(error => {
                             this.snackbarMsg = error;

@@ -131,11 +131,11 @@
                 }
                 await axios.post('/users/login                                                                                                                                             ', JSON.stringify(this.user), config)
                     .then(response => {
-                        debugger;
                         this.user = response.data.details;
                         this.snackbarMsg = response.data.message;
                         this.showToast();
                         localStorage.setItem('iwt-upto-user', JSON.stringify(this.user));
+                        window.location.href = '/home';
                     })
                     .catch(error => {
                         this.snackbarMsg = error;

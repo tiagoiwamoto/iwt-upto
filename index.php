@@ -52,6 +52,7 @@ require_once 'services.php';
 //});
 
 $app->get('/', 'user-controller:index');
+$app->get('/home', 'user-controller:home');
 $app->get('/users', 'user-controller:recoverUsers');
 $app->post('/users/create', 'user-controller:create');
 $app->post('/users/login', 'user-controller:authenticate');

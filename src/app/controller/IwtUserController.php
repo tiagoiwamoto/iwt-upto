@@ -30,13 +30,11 @@ class IwtUserController{
     }
 
     public function index(Request $request, Response $response){
-        session_start();
-        $isLoggedIn = $_SESSION['x-user'];
-        if($isLoggedIn === null){
-            return $this->twig->render($response, 'signin.twig');
-        }else{
-            return $this->twig->render($response, 'home.twig');
-        }
+        return $this->twig->render($response, 'signin.twig');
+    }
+
+    public function home(Request $request, Response $response){
+        return $this->twig->render($response, 'home.twig');
     }
 
     public function authenticate(Request $request, Response $response){
@@ -65,7 +63,12 @@ class IwtUserController{
     }
 
     public function recoverUserImages(Request $request, Response $response){
-        return json_encode($this->iwtUserBO->performRecoverUserImages());
+        session_start();
+        $user = $_SESSION['x-user'];
+        if($user == null){
+            return $this->twig->render($response, 'signin.twig');
+        }
+        return json_encode($this->iwtUserBO->performRecoverUserImages($user));
     }
 
 
