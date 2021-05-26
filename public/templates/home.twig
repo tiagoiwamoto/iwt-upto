@@ -1,0 +1,74 @@
+{% extends 'base.twig' %}
+
+{% block maincontent %}
+    <div id="app">
+        <hr />
+        <div>
+            <label for="formFileLg" class="form-label">Selecione uma ou várias imagens para enviar</label>
+            <input id="images" ref="file" name="file[]" class="form-control form-control-lg" multiple="multiple" type="file">
+        </div>
+        <div class="d-grid gap-2">
+            <button v-on:click="postImages" class="btn btn-primary" type="button">Upload</button>
+        </div>
+        <br />
+        <h4>Últimas imagens enviadas</h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-3" v-for="img in images"><img v-bind:src="img.image_url" width="120" class="album-img" /></div>
+        </div>
+        <span>Temos um total de 8.278 imagens em nosso banco de dados</span>
+
+        <div id="snackbar" style="z-index: 10000">${ snackbarMsg }</div>
+    </div>
+{% endblock %}
+{% block extra %}
+    <script>
+        new Vue({
+            delimiters: ['${', '}'],
+            el: '#app',
+            data: {
+                images: [],
+                snackbarMsg: ''
+            },
+            mounted: function () {
+                this.loadMyImages();
+            },
+            methods: {
+                async postImages(){
+                    const config = {
+                        headers: {'content-type': 'multipart/form-data'}
+                    }
+                    const formData = new FormData();
+                    for( let i = 0; i < this.$refs.file.files.length; i++ ){
+                        let file = this.$refs.file.files[i];
+                        formData.append('files[' + i + ']', file);
+                    }
+
+                    await axios.post('/image/upload', formData, config)
+                        .then(response => {
+                            this.snackbarMsg = response.data.message;
+                            this.showToast();
+                            localStorage.setItem('iwt-upto-user', JSON.stringify(this.user));
+                        })
+                        .catch(error => {
+                            this.snackbarMsg = error;
+                            this.showToast();
+                        })
+                },
+                async loadMyImages(){
+                    const config = {
+                        headers: {'content-type': 'application/json'}
+                    }
+
+                    await axios.get('/images', config)
+                        .then(response => {
+                            this.images = response.data;
+                        })
+                        .catch(error => {
+                            this.snackbarMsg = error;
+                            this.showToast();
+                        })
+                }
+            }
+        })
+    </script>
+{% endblock %}

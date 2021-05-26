@@ -1,0 +1,18 @@
+{
+  "require": {
+    "slim/slim": "3.12.3",
+    "monolog/monolog": "^2.2",
+    "illuminate/database": "^8.25",
+    "slim/twig-view": "2.5",
+    "cboden/ratchet": "^0.4",
+    "ext-json": "*",
+    "netresearch/jsonmapper": "^4.0",
+    "ext-pdo": "*",
+    "ext-simplexml": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "app\\": "src/app"
+    }
+  }
+}

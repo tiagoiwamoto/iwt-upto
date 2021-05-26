@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Iwt-Upto</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/iwtupto.css" />
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="/assets/images/upto-icon.png" alt="" width="32" class="d-inline-block align-text-top">
+            IwtUpto
+        </a>
+    </div>
+</nav>
+<!-- My page will display here -->
+<div class="container">
+    {% block maincontent %}
+    {% endblock %}
+</div>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/vue.global.js"></script>
+<script src="/assets/js/axios.min.js"></script>
+{% block extra %}
+{% endblock %}
+</body>
+</html>

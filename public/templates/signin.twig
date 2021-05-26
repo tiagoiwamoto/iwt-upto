@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Iwt-Upto</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/iwtupto.css" />
+</head>
+<body>
+<!-- My page will display here -->
+<div class="container" id="app">
+
+    <div class="card center-align login-center-screen">
+        <div class="card-header">
+            Entrar
+        </div>
+        <div class="card-body">
+            <div class="card-body">
+                <div class="form-floating mb-3">
+                    <input v-model="user.email" type="email" class="form-control" id="floatingInput" placeholder="nome@email.com">
+                    <label for="floatingInput">Email</label>
+                </div>
+                <div class="form-floating">
+                    <input v-model="user.password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Senha</label>
+                </div>
+
+                <div class="text-end mt-3">
+                    <button v-on:click="performLogin" type="button" class="btn btn-lg btn-outline-primary">Entrar</button>
+                    <button type="button" class="btn btn-lg btn-outline-secondary" data-bs-toggle="modal" href="#modalCreateUser" role="button">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalCreateUser" ref="modalCreateMedication" aria-hidden="true" aria-labelledby="modalCreateUser" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cadastrar novo usuário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input v-model="user.username" type="text" class="form-control" id="registerUsername" placeholder="seu.usuario">
+                        <label for="registerUsername">Nome de usuário</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input v-model="user.email" type="text" class="form-control" id="registerEmail" placeholder="nome@provedor.com.br">
+                        <label for="registerEmail">Email</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input v-model="user.password" type="password" class="form-control" id="registerPassword" placeholder="******">
+                        <label for="registerPassword">Senha</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button v-on:click="performUserCreate" class="btn btn-success">Cadastrar</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar" style="z-index: 10000">${ snackbarMsg }</div>
+</div>
+
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/vue.global.js"></script>
+<script src="/assets/js/axios.min.js"></script>
+<script>
+    new Vue({
+        delimiters: ['${', '}'],
+        el: '#app',
+        data: {
+            user: {
+                username: '',
+                email: '',
+                password: ''
+            },
+            snackbarMsg: ''
+        },
+        mounted: function (){
+        },
+        methods: {
+            async performUserCreate(){
+                if(this.user.username === undefined || this.user.username.length < 1){
+                    this.snackbarMsg = 'Informe um nome de usuário';
+                    this.showToast();
+                    return;
+                }else if(this.user.email === undefined || this.user.email.length < 1){
+                    this.snackbarMsg = 'Informe um email';
+                    this.showToast();
+                    return;
+                }else if(this.user.password === undefined || this.user.password.length < 6){
+                    this.snackbarMsg = 'Informe uma senha com pelo menos 6 caracteres';
+                    this.showToast();
+                    return;
+                }
+
+                const config = {
+                    headers: {'content-type': 'application/json'}
+                }
+                await axios.post('/users/create', JSON.stringify(this.user), config)
+                    .then(response => {
+                        debugger;
+                        this.user = response.data.details;
+                        this.snackbarMsg = response.data.message;
+                        this.showToast();
+                        localStorage.setItem('iwt-upto-user', JSON.stringify(this.user));
+                    })
+                    .catch(error => {
+                        this.snackbarMsg = error;
+                        this.showToast();
+                    })
+            },
+            async performLogin(){
+                if(this.user.email === undefined || this.user.email.length < 1){
+                    this.snackbarMsg = 'Informe um email';
+                    this.showToast();
+                    return;
+                }else if(this.user.password === undefined || this.user.password.length < 6){
+                    this.snackbarMsg = 'Informe sua senha';
+                    this.showToast();
+                    return;
+                }
+                const config = {
+                    headers: {'content-type': 'application/json'}
+                }
+                await axios.post('/users/login                                                                                                                                             ', JSON.stringify(this.user), config)
+                    .then(response => {
+                        debugger;
+                        this.user = response.data.details;
+                        this.snackbarMsg = response.data.message;
+                        this.showToast();
+                        localStorage.setItem('iwt-upto-user', JSON.stringify(this.user));
+                    })
+                    .catch(error => {
+                        this.snackbarMsg = error;
+                        this.showToast();
+                    })
+            },
+            showToast(){
+                // Get the snackbar DIV
+                var x = document.getElementById("snackbar");
+
+                // Add the "show" class to DIV
+                x.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+            }
+        }
+    })
+</script>
+</body>
+</html>
