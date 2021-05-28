@@ -53,7 +53,7 @@ class IwtUserBO{
             $user->setPassword(md5($user->getPassword()));
             $userSaved = $this->iwtUserService->save($user);
             if($userSaved != null){
-                $_SESSION['x-user'] = $userSaved;
+                $_SESSION['x-user'] = $this->iwtUserService->signin($user->getEmail(), $user->getPassword());
                 $apiDto = new ApiDto('0', 'Usuário cadastrado com sucesso', $userSaved);
                 return $apiDto;
             }else{

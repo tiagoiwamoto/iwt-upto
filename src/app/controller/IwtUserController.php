@@ -10,6 +10,7 @@ namespace app\controller;
 
 
 use app\business\object\IwtUserBO;
+use app\model\ApiDto;
 use app\util\ApiDtoUtil;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -31,6 +32,16 @@ class IwtUserController{
 
     public function index(Request $request, Response $response){
         return $this->twig->render($response, 'signin.twig');
+    }
+
+    public function checkLogin(Request $request, Response $response){
+        session_start();
+        $user = $_SESSION['x-user'];
+        if($user != null){
+            return json_encode(['code' => '0', 'message' => 'Usuário autenticado com sucesso', 'details' => $user]);
+        }else{
+            return json_encode(['code' => '1', 'message' => 'Usuário não autenticado', 'details' => null]);
+        }
     }
 
     public function home(Request $request, Response $response){

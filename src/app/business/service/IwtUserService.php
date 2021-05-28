@@ -34,7 +34,9 @@ class IwtUserService{
             ->select()
             ->first();
 
-        $userFound->password = '******';
+        if($userFound != null){
+            $userFound->password = '******';
+        }
         return $userFound;
     }
 
@@ -74,7 +76,7 @@ class IwtUserService{
             $fileToSave = $this->managerDb
                 ->table($this->tableImages)->insert([
                     'title' => $file->getClientFilename(),
-                    'image_url' => 'http://localhost:8181/uploads/' . $currentTime . "." . $extension,
+                    'image_url' => 'http://iwtsys.42web.io/uploads/' . $currentTime . "." . $extension,
                     'file_size' => $file->getSize(),
                     'img_format' => $extension,
                     'user' => $user,

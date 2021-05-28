@@ -56,6 +56,7 @@ $app->get('/home', 'user-controller:home');
 $app->get('/users', 'user-controller:recoverUsers');
 $app->post('/users/create', 'user-controller:create');
 $app->post('/users/login', 'user-controller:authenticate');
+$app->get('/users/check', 'user-controller:checkLogin');
 $app->post('/image/upload', 'user-controller:upload');
 $app->get('/images', 'user-controller:recoverUserImages');
 
